@@ -2,9 +2,8 @@
 
 import { selectDemographics, setData } from "@/lib/features/demographicsSlice";
 import ChangeTheme from "@/utils/ChangeTheme";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import countries from "../lib/data/countries";
 import demographicsOfWorld2024 from "../lib/data/demographicsOfWorld2024";
 import { setLoader } from "@/lib/features/loaderSlice";
@@ -13,7 +12,7 @@ function Select() {
 
   const dispatch = useDispatch();
 
-  function fetchData(isCountry: string, locID?: string) {
+  const fetchData = useCallback((isCountry: string, locID?: string) => {
     dispatch(setLoader(true));
     let endpoint = '';
     if (isCountry === 'country') {
@@ -31,14 +30,14 @@ function Select() {
         throw new Error('Failed to fetch response: ' + response.statusText);
       } else { return response.json() }
     }).then(json => {
-      const yearIndex = new Date().getFullYear() - 1950;
+      const yearIndex = new Date().getFullYear() - 1951;
       dispatch(setData(json[yearIndex]));
     }).catch(error => {
       dispatch(setData(demographicsOfWorld2024));
       alert('Data could not be accessed. The screen is displaying the World 2024 data.');
       console.error('Fetch Error: ', error);
     }).finally(() => { dispatch(setLoader(false)) });
-  }
+  }, [dispatch]);
 
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value !== '900') {
@@ -48,7 +47,7 @@ function Select() {
     }
   }
 
-  useEffect(() => { fetchData('world'); }, [])
+  useEffect(() => { fetchData('world') }, [fetchData]);
 
   const { time } = useSelector(selectDemographics);
   const { locID } = useSelector(selectDemographics);
