@@ -235,7 +235,7 @@ const countries = [
   ["Western Sahara", "732"],
   ["Yemen", "887"],
   ["Zambia", "894"],
-  ["Zimbabwe", "716"]
+  ["Zimbabwe", "716"],
 ];
 
 export default countries;

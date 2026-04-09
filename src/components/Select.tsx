@@ -2,58 +2,80 @@
 
 import { selectDemographics, setData } from "@/lib/features/demographicsSlice";
 import ChangeTheme from "@/utils/ChangeTheme";
-import { useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useCallback, useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks/hooks";
 import countries from "../lib/data/countries";
-import demographicsOfWorld2024 from "../lib/data/demographicsOfWorld2024";
+import demographicDataFor2024 from "../lib/data/demographicDataFor2024";
 import { setLoader } from "@/lib/features/loaderSlice";
+
+type Value = keyof typeof demographicDataFor2024;
 
 function Select() {
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const [status, setStatus] = useState<'ok' | 'error'>('ok');
 
   const fetchData = useCallback((isCountry: string, locID?: string) => {
+
     dispatch(setLoader(true));
-    let endpoint = '';
-    if (isCountry === 'country') {
-      endpoint = `https://world-demographics.p.rapidapi.com/countries/${locID}`;
-    } else {
-      endpoint = 'https://world-demographics.p.rapidapi.com/world';
-    }
-    fetch(endpoint, { method: 'GET',
-      headers: {
-        'x-rapidapi-key': '006e52307fmshd4072f4e9b6a7c5p140e58jsn2335a1bbb4e3',
-        'x-rapidapi-host': 'world-demographics.p.rapidapi.com'
+
+    const endpoint = (isCountry === 'country')
+      ? `https://world-demographics.p.rapidapi.com/countries/${locID}`
+      : 'https://world-demographics.p.rapidapi.com/world';
+    return fetch(endpoint,
+      {
+        method: 'GET',
+        headers: {
+          'x-rapidapi-key': '6c9ab44184mshaf3b7cde0f7e8c8p1d9ed3jsn03e5d01791ea',
+          'x-rapidapi-host': 'world-demographics.p.rapidapi.com',
+          'Content-Type': 'application/json',
+        },
       }
-    }).then(response => {
+    ).then(response => {
       if(!response.ok) {
-        throw new Error('Failed to fetch response: ' + response.statusText);
-      } else { return response.json() }
-    }).then(json => {
+        setStatus('error');
+        throw new Error('Could not fetch the demographics.');
+      };
+      return response.json();
+    }).then(data => {
       const yearIndex = new Date().getFullYear() - 1951;
-      dispatch(setData(json[yearIndex]));
-    }).catch(error => {
-      dispatch(setData(demographicsOfWorld2024));
-      alert('Data could not be accessed. The screen is displaying the World 2024 data.');
-      console.error('Fetch Error: ', error);
+      const thisYear = data?.[yearIndex];
+      if (thisYear === undefined) {
+        setStatus('error');
+        throw new Error('Could not retrieve the demographic data.');
+      };
+      setStatus('ok');
+      dispatch(setData(thisYear));
     }).finally(() => { dispatch(setLoader(false)) });
+
   }, [dispatch]);
 
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value !== '900') {
-      fetchData('country', e.target.value)
-    } else {
-      fetchData('world');
+    const value = e.target.value;
+    fetchData(value === '900' ? 'world' : 'country', value)
+      .catch((error) => {
+        dispatch(setData(demographicDataFor2024[value as Value]));
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchData('world')
+      .catch((error) => {
+        dispatch(setData(demographicDataFor2024['900']));
+        console.error(error);
+      });  
+  }, [fetchData, dispatch]);
+
+  const { time, locID } = useAppSelector(selectDemographics);
+
+  return (<>
+    {status === "error" &&
+    <div id="failure">
+      Data could not be accessed. You can view the demographics of the World, China, Türkiye, and United States of America for 2024.
+    </div>
     }
-  }
-
-  useEffect(() => { fetchData('world') }, [fetchData]);
-
-  const { time } = useSelector(selectDemographics);
-  const { locID } = useSelector(selectDemographics);
-
-  return (
-    <section id='utilities'>
+    <section id="utilities">
       <div>Year: {time}</div>
       <div>
         <label htmlFor="text-format">
@@ -63,10 +85,21 @@ function Select() {
             value={locID}
             onChange={handleSelect}
           >
+            {status === "ok" ?
+            <>
             <option key={900} value="900">World</option>
             {countries.map(country => <option
               key={country[1]} value={country[1]}>{country[0]}
             </option>)}
+            </>
+            :
+            <>
+            <option key={900} value="900">World</option>
+            <option key={156} value="156">China</option>
+            <option key={792} value="792">Türkiye</option>
+            <option key={840} value="840">United States of America</option>
+            </>
+            }
           </select>
         </label>
       </div>
@@ -74,7 +107,8 @@ function Select() {
         <ChangeTheme />
       </div>
     </section>
-  )
+  </>);
+
 }
 
 export default Select;

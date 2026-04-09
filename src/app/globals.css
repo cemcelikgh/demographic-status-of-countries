@@ -9,6 +9,8 @@
   --colour-six: #ff6166;
   --color-seve: #52a8ff;
   --color-eigh: #ffb224;
+  --color-nine: #ffebeb;
+  --colour-ten: #cb2a2f;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,6 +25,8 @@
     --colour-six: #d93036;
     --color-seve: #0062d1;
     --color-eigh: #ff990a;
+    --color-nine: #e5484d;
+    --colour-ten: #ebebeb;
   }
 }
 
@@ -48,6 +52,8 @@ html {
   --colour-six: #ff6166;
   --color-seve: #52a8ff;
   --color-eigh: #ffb224;
+  --color-nine: #ffebeb;
+  --colour-ten: #cb2a2f;
 }
 
 .dark-theme {
@@ -61,6 +67,8 @@ html {
   --colour-six: #d93036;
   --color-seve: #0062d1;
   --color-eigh: #ff990a;
+  --color-nine: #e5484d;
+  --colour-ten: #ebebeb;
 }
 
 body {
@@ -80,6 +88,17 @@ main {
 h1 {
   text-align: center;
 }
+      #failure {
+  margin-top: 20px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 15px;
+  text-align: center;
+  color: var(--colour-ten);
+  background-color: var(--color-nine);
+  border: 1px solid var(--colour-one);
+  border-radius: 5px;
+      }
 
 #utilities {
   margin-top: 20px;
@@ -272,6 +291,11 @@ input:checked + .switch-icon {
 }
 
 @media (width < 600px) {
+  #failure {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-size: 13px;
+  }
   #utilities {
     flex-direction: column-reverse;
   }
@@ -294,6 +318,11 @@ input:checked + .switch-icon {
 @media (width < 500px) {
   h1 {
     font-size: 17px;
+  }
+  #failure {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 12px;
   }
   #info {
     display: none;

@@ -7,12 +7,10 @@ export const loaderSlice = createSlice({
   reducers: {
     setLoader: (_state, action: PayloadAction<boolean>) => {
       return action.payload;
-    }
-  }
-})
+    },
+  },
+});
 
 export const { setLoader } = loaderSlice.actions;
-
 export const selectLoader = (state: RootState) => state.loader;
-
 export default loaderSlice.reducer;

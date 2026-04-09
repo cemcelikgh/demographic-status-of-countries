@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import App from "./StoreProvider";
+import ReduxProvider from "./ReduxProvider";
 
 export const metadata: Metadata = {
   title: "Demographic Status of Countries",
   icons: {
-    icon: '/square-poll-vertical-solid.svg'
-  }
+    icon: '/square-poll-vertical-solid.svg',
+  },
 };
 
-export default function RootLayout({
+function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <App>
+    <ReduxProvider>
       {children}
-    </App>
+    </ReduxProvider>
   );
 }
+
+export default RootLayout;

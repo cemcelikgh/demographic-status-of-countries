@@ -1,11 +1,11 @@
 'use client';
 
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/lib/hooks/hooks";
 import { selectDemographics } from "@/lib/features/demographicsSlice";
 
 function Info() {
 
-  const demographics = useSelector(selectDemographics);
+  const demographics = useAppSelector(selectDemographics);
 
   return (
     <section id='info'>
@@ -34,7 +34,8 @@ function Info() {
         </p>
       </div>
     </section>
-  )
+  );
+
 }
 
 export default Info;

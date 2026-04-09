@@ -2,19 +2,19 @@ next
 <br>react
 <br>react-dom
 <br>react-scripts
-<br>Feb 2025
+<br>Apr 2026
 <br><https://nextjs.org/docs/app/getting-started/installation>
 
 react-redux
 <br>@reduxjs/toolkit
-<br>Feb 2025
+<br>Apr 2026
 <br><https://redux-toolkit.js.org/tutorials/typescript>
 
 typescript
 <br>@types/node
 <br>@types/react
 <br>@types/react-dom
-<br>Feb 2025
+<br>Apr 2026
 <br><https://www.typescriptlang.org/download/>
 
 World Demographics API
