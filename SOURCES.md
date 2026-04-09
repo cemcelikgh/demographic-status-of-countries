@@ -17,6 +17,10 @@ typescript
 <br>Apr 2026
 <br><https://www.typescriptlang.org/download/>
 
+@netlify/functions
+<br>Apr 2026
+<br><https://docs.netlify.com/build/functions/get-started/>
+
 World Demographics API
 <br>Feb 2025
 <br><https://rapidapi.com/api-solutions-api-solutions-default/api/world-demographics>

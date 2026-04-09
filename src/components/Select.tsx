@@ -20,18 +20,10 @@ function Select() {
     dispatch(setLoader(true));
 
     const endpoint = (isCountry === 'country')
-      ? `https://world-demographics.p.rapidapi.com/countries/${locID}`
-      : 'https://world-demographics.p.rapidapi.com/world';
-    return fetch(endpoint,
-      {
-        method: 'GET',
-        headers: {
-          'x-rapidapi-key': '6c9ab44184mshaf3b7cde0f7e8c8p1d9ed3jsn03e5d01791ea',
-          'x-rapidapi-host': 'world-demographics.p.rapidapi.com',
-          'Content-Type': 'application/json',
-        },
-      }
-    ).then(response => {
+      ? `/.netlify/functions/worldDemographics`
+      : `/.netlify/functions/countriesDemographics?locID=${locID}`;
+    return fetch(endpoint)
+    .then(response => {
       if(!response.ok) {
         setStatus('error');
         throw new Error('Could not fetch the demographics.');
