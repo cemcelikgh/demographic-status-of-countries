@@ -18,22 +18,11 @@ function Select() {
 
     dispatch(setLoader(true));
 
-    const apiKey = process.env.NEXT_PUBLIC_WOR_DEM_API_KEY;
-    if (!apiKey) throw new Error('NEXT_PUBLIC_WOR_DEM_API_KEY is missing');
-
     const endpoint = (isCountry === 'country')
-      ? `https://world-demographics.p.rapidapi.com/countries/${locID}`
-      : 'https://world-demographics.p.rapidapi.com/world';
-    return fetch(endpoint,
-      {
-        method: 'GET',
-        headers: {
-          'x-rapidapi-key': apiKey,
-          'x-rapidapi-host': 'world-demographics.p.rapidapi.com',
-          'Content-Type': 'application/json',
-        },
-      }
-    ).then(response => {
+      ? `/.netlify/functions/worldDemographics`
+      : `/.netlify/functions/countriesDemographics?locID=${locID}`;
+    return fetch(endpoint)
+    .then(response => {
       if(!response.ok) {
         setStatus('error');
         throw new Error('Could not fetch the demographics.');
