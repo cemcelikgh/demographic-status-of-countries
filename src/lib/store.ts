@@ -3,13 +3,16 @@ import demographicsReducer from './features/demographicsSlice';
 import themeReducer from './features/themeSlice';
 import loaderReducer from './features/loaderSlice';
 
-export const store = configureStore({
-  reducer: {
-    demographics: demographicsReducer,
-    loader: loaderReducer,
-    theme: themeReducer
-  }
-})
+export const makeStore = () => {
+  return configureStore({
+    reducer: {
+      demographics: demographicsReducer,
+      loader: loaderReducer,
+      theme: themeReducer,
+    },
+  });
+};
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type AppStore = ReturnType<typeof makeStore>;
+export type RootState = ReturnType<AppStore['getState']>;
+export type AppDispatch = AppStore['dispatch'];

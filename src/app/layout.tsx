@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import App from "./StoreProvider";
+import StoreProvider from "./StoreProvider";
 
 export const metadata: Metadata = {
   title: "Demographic Status of Countries",
-  icons: {
-    icon: '/square-poll-vertical-solid.svg'
-  }
+  description: "Patika Intermediate Frontend Web Development Path Certification Task",
 };
 
-export default function RootLayout({
+function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <App>
+    <StoreProvider>
       {children}
-    </App>
+    </StoreProvider>
   );
 }
+
+export default RootLayout;

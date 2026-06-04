@@ -1,23 +1,24 @@
 'use client';
 
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/lib/hooks";
 import { selectTheme } from "@/lib/features/themeSlice";
 
 function Html({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
 
-  const theme = useSelector(selectTheme);
+  const theme = useAppSelector(selectTheme);
 
   return (
-    <html lang="en" className={theme}>
+    <html lang="en" className={theme} style={{colorScheme: theme}}>
       <body>
         {children}
       </body>
     </html>
   );
+
 }
 
 export default Html;
