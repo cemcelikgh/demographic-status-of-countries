@@ -9,33 +9,18 @@ import countries from "./countries";
 import demographicDataFor2026 from "../../data/demographicDataFor2026";
 import ThemeSelector from "./theme-selector/ThemeSelector";
 
-type LocType = 'country' | 'world';
-
 function Selectors() {
 
   const [status, setStatus] = useState<'ok' | 'error'>('ok');
   const { time, locID } = useAppSelector(selectDemographics);
   const dispatch = useAppDispatch();
 
-  const fetchData = useCallback((locType: LocType, locID?: string) => {
+  const fetchData = useCallback((locID?: string) => {
 
     dispatch(setLoader(true));
 
-    const apiKey = process.env.NEXT_PUBLIC_WOR_DEM_API_KEY;
-    if (!apiKey) throw new Error('NEXT_PUBLIC_WOR_DEM_API_KEY is missing');
-
-    const endpoint = locType === 'country'
-      ? `https://world-demographics.p.rapidapi.com/countries/${locID}`
-      : 'https://world-demographics.p.rapidapi.com/world';
-
-    return fetch(endpoint, {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-key': apiKey,
-        'x-rapidapi-host': 'world-demographics.p.rapidapi.com',
-        'Content-Type': 'application/json',
-      },
-    }).then(response => {
+    return fetch(`/.netlify/functions/demographics?locID=${locID}`)
+    .then(response => {
       if(!response.ok) {
         setStatus('error');
         throw new Error('Could not fetch the demographics.');
@@ -55,16 +40,16 @@ function Selectors() {
   }, [dispatch]);
 
   useEffect(() => {
-    fetchData('world')
+    fetchData()
     .catch((error) => {
       dispatch(setData(demographicDataFor2026['900']));
       console.error(error);
-    });  
+    });
   }, [fetchData, dispatch]);
 
   const handleSelectLocation = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    fetchData(value === '900' ? 'world' : 'country', value)
+    fetchData(value === '900' ? undefined : value)
     .catch((error) => {
       const val =
         value === '900' ? '900' :

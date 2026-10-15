@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@netlify/functions": "^6.0.2",
     "@reduxjs/toolkit": "^2.11.2",
     "chart.js": "^4.4.7",
     "next": "16.2.2",
@@ -23,6 +24,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
+    "netlify-cli": "^27.12.1",
     "typescript": "^5"
   }
 }

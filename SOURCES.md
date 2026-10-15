@@ -21,6 +21,11 @@ eslint
 <br>Jun 2026
 <br><https://eslint.org/docs/latest/use/getting-started>
 
+netlify-cli
+<br>@netlify/functions
+<br>Oct 2026
+<br><https://docs.netlify.com/>
+
 World Demographics API
 <br>Feb 2025
 <br><https://rapidapi.com/api-solutions-api-solutions-default/api/world-demographics>
