@@ -1,8 +1,8 @@
 # demographic-status-of-countries
 Patika Intermediate Frontend Web Development Path Certification Task
 <br>Demographic Status of Countries
-<br>Redux Toolkit, TypeScript, Next.js 16
+<br>Redux Toolkit, TypeScript, Next.js
 
-Display: <https://demographic-status-of-countries.netlify.app/>
+Live: <https://demographic-status-of-countries.netlify.app/>
 
-[![Demographic Status of Countries Preview](./public/images/ui-previews/themes.png "Display Demographic Status of Countries")](https://demographic-status-of-countries.netlify.app/)
+[![Demographic Status of Countries Preview](./public/themes.png "Display Demographic Status of Countries")](https://demographic-status-of-countries.netlify.app/)

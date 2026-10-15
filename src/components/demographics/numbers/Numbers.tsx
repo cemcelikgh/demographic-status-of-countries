@@ -28,9 +28,11 @@ function Numbers() {
       <div>
         <h4>Net Change</h4>
         <p>
-          {(demographics.births - demographics.deaths
-          + demographics.netMigrations).toFixed(3)
-          } (K)
+          {(
+            demographics.births
+            - demographics.deaths
+            + demographics.netMigrations
+          ).toFixed(3)} (K)
         </p>
       </div>
     </section>

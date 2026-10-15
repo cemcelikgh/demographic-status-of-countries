@@ -2,38 +2,40 @@
 
 import { selectDemographics, setData }
   from "@/lib/features/demographicsSlice";
-import ThemeSelector from "@/utils/ThemeSelector";
-import { useCallback, useEffect, useState } from "react";
+import { setLoader } from "@/lib/features/loaderSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { useCallback, useEffect, useState } from "react";
 import countries from "./countries";
 import demographicDataFor2026 from "../../data/demographicDataFor2026";
-import { setLoader } from "@/lib/features/loaderSlice";
+import ThemeSelector from "./theme-selector/ThemeSelector";
 
-function Select() {
+type LocType = 'country' | 'world';
 
-  const dispatch = useAppDispatch();
+function Selectors() {
+
   const [status, setStatus] = useState<'ok' | 'error'>('ok');
+  const { time, locID } = useAppSelector(selectDemographics);
+  const dispatch = useAppDispatch();
 
-  const fetchData = useCallback((isCountry: string, locID?: string) => {
+  const fetchData = useCallback((locType: LocType, locID?: string) => {
 
     dispatch(setLoader(true));
 
     const apiKey = process.env.NEXT_PUBLIC_WOR_DEM_API_KEY;
     if (!apiKey) throw new Error('NEXT_PUBLIC_WOR_DEM_API_KEY is missing');
 
-    const endpoint = (isCountry === 'country')
+    const endpoint = locType === 'country'
       ? `https://world-demographics.p.rapidapi.com/countries/${locID}`
       : 'https://world-demographics.p.rapidapi.com/world';
-    return fetch(endpoint,
-      {
-        method: 'GET',
-        headers: {
-          'x-rapidapi-key': apiKey,
-          'x-rapidapi-host': 'world-demographics.p.rapidapi.com',
-          'Content-Type': 'application/json',
-        },
-      }
-    ).then(response => {
+
+    return fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        'x-rapidapi-key': apiKey,
+        'x-rapidapi-host': 'world-demographics.p.rapidapi.com',
+        'Content-Type': 'application/json',
+      },
+    }).then(response => {
       if(!response.ok) {
         setStatus('error');
         throw new Error('Could not fetch the demographics.');
@@ -52,58 +54,55 @@ function Select() {
 
   }, [dispatch]);
 
-  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    fetchData(value === '900' ? 'world' : 'country', value)
-      .catch((error) => {
-        const val = value === '900' ? '900'
-          : value === '840' ? '840' : value === '792' ? '792' : '156';
-        dispatch(setData(demographicDataFor2026[val]));
-        console.error(error);
-      });
-  };
-
   useEffect(() => {
     fetchData('world')
-      .catch((error) => {
-        dispatch(setData(demographicDataFor2026['900']));
-        console.error(error);
-      });  
+    .catch((error) => {
+      dispatch(setData(demographicDataFor2026['900']));
+      console.error(error);
+    });  
   }, [fetchData, dispatch]);
 
-  const { time, locID } = useAppSelector(selectDemographics);
+  const handleSelectLocation = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    fetchData(value === '900' ? 'world' : 'country', value)
+    .catch((error) => {
+      const val =
+        value === '900' ? '900' :
+        value === '156' ? '156' :
+        value === '792' ? '792' :
+        '840';
+      dispatch(setData(demographicDataFor2026[val]));
+      console.error(error);
+    });
+  };
 
   return (<>
     {status === "error" &&
     <div id="failure">
-      Data could not be accessed. You can view the demographics of the World, China, Türkiye, and United States of America for 2026.
-    </div>
-    }
+      Data could not be accessed. You can view the demographics of the World,
+      China, Türkiye, and United States of America for 2026.
+    </div>}
     <section id="selectors">
       <div>Year: {time}</div>
       <div>
         <label htmlFor="text-format">
           <span id="country">{locID === 900 ? 'Entire' : 'Country:'}</span>
           <select
-            id="text-format" name="text-format"
+            id="text-format"
+            name="text-format"
             value={locID}
-            onChange={handleSelect}
+            onChange={handleSelectLocation}
           >
-            {status === "ok" ?
-            <>
+            {status === "ok" ? <>
             <option key={900} value="900">World</option>
-            {countries.map(country => <option
-              key={country[1]} value={country[1]}>{country[0]}
-            </option>)}
-            </>
-            :
-            <>
+            {countries.map(country =>
+            <option key={country[1]} value={country[1]}>{country[0]}</option>)}
+            </> : <>
             <option key={900} value="900">World</option>
             <option key={156} value="156">China</option>
             <option key={792} value="792">Türkiye</option>
             <option key={840} value="840">United States of America</option>
-            </>
-            }
+            </>}
           </select>
         </label>
       </div>
@@ -113,4 +112,4 @@ function Select() {
 
 }
 
-export default Select;
+export default Selectors;
