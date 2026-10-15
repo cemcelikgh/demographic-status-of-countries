@@ -16,6 +16,11 @@ typescript
 <br>Jun 2026
 <br><https://www.typescriptlang.org/download/>
 
+eslint
+<br>eslint-config-next
+<br>Jun 2026
+<br><https://eslint.org/docs/latest/use/getting-started>
+
 World Demographics API
 <br>Feb 2025
 <br><https://rapidapi.com/api-solutions-api-solutions-default/api/world-demographics>
